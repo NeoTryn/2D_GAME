@@ -8,6 +8,8 @@ add_executable(game
                src/main.cpp
                src/glad.c              
                src/stb_image.h
+			   src/Shader.cpp
+			   src/Shader.hpp
               )
 
 target_include_directories(game PUBLIC ~/include)
