@@ -38,8 +38,10 @@ int main() {
 		std::cout << "GLFW failed to initialize.\n";
 		return -1;
 	}
+	
+	const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 
-	GLFWwindow* window = glfwCreateWindow(800, 600, "GAME", nullptr, nullptr);
+	GLFWwindow* window = glfwCreateWindow(mode->width, mode->height, "GAME", glfwGetPrimaryMonitor(), nullptr);
 
 	if (!window) {
 		std::cout << "GLFW failed to create a window.\n";
@@ -57,7 +59,7 @@ int main() {
 		return -1;
 	}
 
-	glViewport(0, 0, 800, 600);
+	glViewport(0, 0, mode->width, mode->height);
 
 	glClearColor(0.3f, 0.5f, 0.6f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
