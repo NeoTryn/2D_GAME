@@ -1,9 +1,11 @@
 #include <glad/glad.h>
-#include <string>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+
+#include <string>
+#include <iostream>
 
 #ifndef SHADER_HPP
 #define SHADER_HPP
@@ -18,6 +20,8 @@ public:
 	~Shader() = default;
 
 	void use();
+
+	void deleteProgram();
 
 	void uniform1i(int value);
 	void uniform1f(float value);

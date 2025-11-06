@@ -1,7 +1,5 @@
-#include<glad/glad.h>
+#include "Shader.hpp"
 #include<GLFW/glfw3.h>
-
-#include <iostream>
 
 void framebufferSizeCallback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
@@ -64,7 +62,7 @@ int main() {
 	glClearColor(0.3f, 0.5f, 0.6f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	unsigned int vertexShader, fragmentShader;
+	/*unsigned int vertexShader, fragmentShader;
 
 	char infoLog[512];
 	int success;
@@ -97,8 +95,11 @@ int main() {
 	glAttachShader(shaderProgram, vertexShader);
 	glAttachShader(shaderProgram, fragmentShader);
 	glLinkProgram(shaderProgram);
+	*/
 
-	glUseProgram(shaderProgram);
+	Shader shader = {vertexShaderSrc, fragmentShaderSrc};	
+
+	shader.use();
 
 	unsigned int VBO, VAO;
 
@@ -120,8 +121,8 @@ int main() {
 		processInput(window);
 
 		glClear(GL_COLOR_BUFFER_BIT);
-
-		glUseProgram(shaderProgram);
+		
+		shader.use();
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 
@@ -129,8 +130,9 @@ int main() {
 		glfwPollEvents();
 	}
 
-	glfwTerminate();
 	glfwDestroyWindow(window);
+	glfwTerminate();
+	shader.deleteProgram();
 }
 
 void framebufferSizeCallback(GLFWwindow* window, int width, int height) {
