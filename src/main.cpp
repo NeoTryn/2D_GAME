@@ -1,9 +1,12 @@
 #include "Shader.hpp"
-#include<GLFW/glfw3.h>
+#include <GLFW/glfw3.h>
+
+#include "ResourceManager.hpp"
 
 void framebufferSizeCallback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
 
+/*
 const char* vertexShaderSrc = 
 "#version 460 core\n"
 "layout (location = 0) in vec3 vertPos;\n"
@@ -18,7 +21,7 @@ const char* fragmentShaderSrc =
 "\n"
 "void main() {\n"
 "	fragCol = vec4(0.9, 0.3, 0.5, 1.0);\n"
-"}\n";
+"}\n";*/
 
 const float vertices[] = {
 	-0.5f, -0.5f, 0.0f,
@@ -62,40 +65,13 @@ int main() {
 	glClearColor(0.3f, 0.5f, 0.6f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	/*unsigned int vertexShader, fragmentShader;
+	std::string vertexShaderStr, fragmentShaderStr;
 
-	char infoLog[512];
-	int success;
+	ResourceManager::readFromFile("src/shader/vertex_shader.glsl", &vertexShaderStr);
+	ResourceManager::readFromFile("src/shader/fragment_shader.glsl", &fragmentShaderStr);
 
-	vertexShader = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(vertexShader, 1, &vertexShaderSrc, nullptr);
-	glCompileShader(vertexShader);
-	
-	glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-
-	if (!success) {
-		glGetShaderInfoLog(vertexShader, 512, nullptr, infoLog);
-		std::cout << "Vertex Shader compilation failed. Infolog: " << infoLog << std::endl;
-	}
-
-	fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fragmentShader, 1, &fragmentShaderSrc, nullptr);
-	glCompileShader(fragmentShader);
-		
-	glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
-
-	if (!success) {
-		glGetShaderInfoLog(fragmentShader, 512, nullptr, infoLog);
-		std::cout << "Fragment Shader compilation failed. Infolog: " << infoLog << std::endl;
-	}
-
-	unsigned int shaderProgram;
-
-	shaderProgram = glCreateProgram();
-	glAttachShader(shaderProgram, vertexShader);
-	glAttachShader(shaderProgram, fragmentShader);
-	glLinkProgram(shaderProgram);
-	*/
+	const char* vertexShaderSrc = vertexShaderStr.c_str();
+	const char* fragmentShaderSrc = fragmentShaderStr.c_str();
 
 	Shader shader = {vertexShaderSrc, fragmentShaderSrc};	
 
