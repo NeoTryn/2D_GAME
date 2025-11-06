@@ -4,6 +4,7 @@
 #include <iostream>
 
 void framebufferSizeCallback(GLFWwindow* window, int width, int height);
+void processInput(GLFWwindow* window);
 
 int main() {
 
@@ -40,6 +41,7 @@ int main() {
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	while(!glfwWindowShouldClose(window)) {
+		processInput(window);
 
 		glClear(GL_COLOR_BUFFER_BIT);
 
@@ -53,4 +55,10 @@ int main() {
 
 void framebufferSizeCallback(GLFWwindow* window, int width, int height) {
 	glViewport(0, 0, width, height);
+}
+
+void processInput(GLFWwindow* window) {
+	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+		glfwSetWindowShouldClose(window, GLFW_TRUE);
+	}
 }
