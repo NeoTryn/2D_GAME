@@ -19,7 +19,7 @@ const char* fragmentShaderSrc =
 "out vec4 fragCol;\n"
 "\n"
 "void main() {\n"
-"	fragCol = vec4(0.9f, 0.3f, 0.5f, 1.0f);\n"
+"	fragCol = vec4(0.9, 0.3, 0.5, 1.0);\n"
 "}\n";
 
 const float vertices[] = {
@@ -89,10 +89,39 @@ int main() {
 		std::cout << "Fragment Shader compilation failed. Infolog: " << infoLog << std::endl;
 	}
 
+	unsigned int shaderProgram;
+
+	shaderProgram = glCreateProgram();
+	glAttachShader(shaderProgram, vertexShader);
+	glAttachShader(shaderProgram, fragmentShader);
+	glLinkProgram(shaderProgram);
+
+	glUseProgram(shaderProgram);
+
+	unsigned int VBO, VAO;
+
+	glCreateBuffers(1, &VBO);
+	glCreateBuffers(1, &VAO);
+
+	glBindVertexArray(VAO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), &vertices, GL_STATIC_DRAW);
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), reinterpret_cast<void*>(0));
+	glEnableVertexAttribArray(0);
+
+	glBindVertexArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
 	while(!glfwWindowShouldClose(window)) {
 		processInput(window);
 
 		glClear(GL_COLOR_BUFFER_BIT);
+
+		glUseProgram(shaderProgram);
+		glBindVertexArray(VAO);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
