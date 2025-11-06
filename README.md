@@ -4,3 +4,5 @@ To build from source, you have to:
 - Add glad folder from include to usr/include.
 - Add stb_image.h to src folder.
 - Install CMake and g++.
+
+To see line count run `cloc --exclude-list-file=.clocignore src`
