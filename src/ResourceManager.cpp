@@ -6,10 +6,19 @@
 #include <stdexcept>
 #include <unordered_map>
 
-ResourceManager::ResourceManager() {
+#include "stb_image.h"
+
+ResourceManager::ResourceManager(const char* vertexShaderSrc, const char* fragmentShaderSrc) {
 	ResourceManager::entities = std::make_shared<std::unordered_map<std::string, Entity>>();
-	ResourceManager::shaders = std::make_shared<std::unordered_map<std::string,Shader>>();
-	ResourceManager::atlas = std::make_shared<unsigned int>();
+
+	Shader shader = {vertexShaderSrc, fragmentShaderSrc};
+
+	ResourceManager::shaders = std::make_shared<std::unordered_map<std::string,Shader>>(std::unordered_map<std::string, Shader>{
+				{"default", shader}
+			}
+		);
+
+	ResourceManager::loadAtlas();
 }
 
 void ResourceManager::readFromFile(std::string path, std::string* result) {
@@ -59,4 +68,41 @@ void ResourceManager::writeToFile(std::string path, std::string content) {
 	catch(std::runtime_error e) {
 		std::cerr << e.what() << std::endl;
 	}
+}
+
+void ResourceManager::loadAtlas() {
+
+	unsigned int texture;
+	
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+	int width, height, nrChannels;
+	
+	const char* path = "img/squid.png";
+
+	unsigned char* data = stbi_load(path, &width, &height, &nrChannels, 0);
+			
+	std::cout << width << " " << height << " " << nrChannels <<"\n";
+
+	if (data) {
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
+	else {
+		std::cerr << "Image couldn't be loaded. \n";
+	}
+	stbi_image_free(data);
+
+	(*shaders)["default"].uniform1i("whistle", 0);
+
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texture);
 }

@@ -3,8 +3,6 @@
 
 #include "ResourceManager.hpp"
 
-#include "stb_image.h"
-
 #include <iostream>
 
 void framebufferSizeCallback(GLFWwindow* window, int width, int height);
@@ -79,13 +77,11 @@ int main() {
 
 	ResourceManager::readFromFile("src/shader/vertex_shader.glsl", &vertexShaderStr);
 	ResourceManager::readFromFile("src/shader/fragment_shader.glsl", &fragmentShaderStr);
-	
+
+	std::cout << vertexShaderStr << "\n\n" << fragmentShaderStr << std::endl;
+
 	const char* vertexShaderSrc = vertexShaderStr.c_str();
 	const char* fragmentShaderSrc = fragmentShaderStr.c_str();
-
-	Shader shader = {vertexShaderSrc, fragmentShaderSrc};	
-
-	shader.use();
 
 	unsigned int VBO, VAO, EBO;
 
@@ -110,9 +106,7 @@ int main() {
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-	stbi_set_flip_vertically_on_load(true);
-
-	unsigned int texture;
+	/*unsigned int texture;
 	
 	glGenTextures(1, &texture);
 	glBindTexture(GL_TEXTURE_2D, texture);
@@ -145,12 +139,18 @@ int main() {
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture);
 	
+	*/
+
+	ResourceManager mng = {vertexShaderSrc, fragmentShaderSrc};
+
+	auto shader = mng.shaders->find("default");
+
 	while(!glfwWindowShouldClose(window)) {
 		processInput(window);
 
 		glClear(GL_COLOR_BUFFER_BIT);
 		
-		shader.use();
+		shader->second.use();
 		glBindVertexArray(VAO);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 		
@@ -162,7 +162,7 @@ int main() {
 
 	glfwDestroyWindow(window);
 	glfwTerminate();
-	shader.deleteProgram();
+	shader->second.deleteProgram();
 }
 
 void framebufferSizeCallback(GLFWwindow* window, int width, int height) {
