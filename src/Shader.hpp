@@ -5,7 +5,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include <string>
-#include <iostream>
 
 #ifndef SHADER_HPP
 #define SHADER_HPP
@@ -23,11 +22,10 @@ public:
 
 	void deleteProgram();
 
-	void uniform1i(int value);
-	void uniform1f(float value);
-	void uniform1d(double value);
-	void uniform1b(bool value);
-	void uniform1s(std::string value);
+	void uniform1i(std::string name, int value);
+	void uniform1f(std::string name, float value);
+	void uniform1d(std::string name, double value);
+	void uniform1b(std::string name, bool value);
 	
 	void uniformVec2(std::string name, glm::vec2 value);
 	void uniformVec3(std::string name, glm::vec3 value);	

@@ -1,7 +1,10 @@
 #version 460 core
 
 out vec4 fragCol;
+in vec2 texCoords;
+
+uniform sampler2D image;
 
 void main() {
-	fragCol = vec4(0.9, 0.3, 0.5, 1.0);
+	fragCol = texture(image, texCoords);
 }

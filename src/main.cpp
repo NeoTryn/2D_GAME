@@ -3,6 +3,10 @@
 
 #include "ResourceManager.hpp"
 
+#include "stb_image.h"
+
+#include <iostream>
+
 void framebufferSizeCallback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
 
@@ -24,9 +28,9 @@ const char* fragmentShaderSrc =
 "}\n";*/
 
 const float vertices[] = {
-	-0.5f, -0.5f, 0.0f,
-	 0.0f,  0.5f, 0.0f,
-	 0.5f, -0.5f, 0.0f
+	-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
+	 0.0f,  0.5f, 0.0f, 0.5f, 1.0f,
+	 0.5f, -0.5f, 0.0f, 1.0f, 0.0f
 };
 
 int main() {
@@ -77,7 +81,7 @@ int main() {
 
 	shader.use();
 
-	unsigned int VBO, VAO;
+		unsigned int VBO, VAO;
 
 	glCreateBuffers(1, &VBO);
 	glCreateBuffers(1, &VAO);
@@ -87,12 +91,50 @@ int main() {
 
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), &vertices, GL_STATIC_DRAW);
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), reinterpret_cast<void*>(0));
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), reinterpret_cast<void*>(0));
 	glEnableVertexAttribArray(0);
+
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), reinterpret_cast<void*>(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
 
 	glBindVertexArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
+	stbi_set_flip_vertically_on_load(true);
+
+	unsigned int texture;
+	
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+	int width, height, nrChannels;
+	
+	const char* path = "img/blow_my_whistle.jpg";
+
+	unsigned char* data = stbi_load(path, &width, &height, &nrChannels, 0);
+			
+	std::cout << width << " " << height << " " << nrChannels <<"\n";
+
+	if (data) {
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
+	else {
+		std::cerr << "Image couldn't be loaded. \n";
+	}
+	stbi_image_free(data);
+	shader.uniform1i("whistle", 0);
+
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	
 	while(!glfwWindowShouldClose(window)) {
 		processInput(window);
 
