@@ -69,7 +69,7 @@ int main() {
 
 	ResourceManager::readFromFile("src/shader/vertex_shader.glsl", &vertexShaderStr);
 	ResourceManager::readFromFile("src/shader/fragment_shader.glsl", &fragmentShaderStr);
-
+	
 	const char* vertexShaderSrc = vertexShaderStr.c_str();
 	const char* fragmentShaderSrc = fragmentShaderStr.c_str();
 
