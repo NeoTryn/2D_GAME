@@ -1,24 +1,27 @@
 #include <string>
-
-#ifndef TEXTURE_HPP
-#define TEXTURE_HPP
-
-struct Texture {
-	
-	std::string name;
-	int width, height, nrChannels;
-	unsigned int texture;
-};
-
-#endif
+#include <vector>
 
 #ifndef ENTITY_HPP
 #define ENTITY_HPP
 
+
+struct AtlasSpec {
+
+	short beginColumn, endColumn, beginRow, endRow;
+};
+
 class Entity {
 public:
 
-	Texture texture;	
+	std::vector<unsigned int> vertexArrayObjects;
+
+	Entity(std::string samplerName, AtlasSpec);
+	~Entity() = default;
+
+private:
+	
+	void loadSpriteBatch(AtlasSpec atlasSpec);
+	void loadTexture(std::string samplerName);
 };
 
 #endif

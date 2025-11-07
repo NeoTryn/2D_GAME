@@ -11,12 +11,12 @@
 class Renderer {
 private:
 
-	std::shared_ptr<Shader> shader;
+	std::shared_ptr<std::unordered_map<std::string, Shader>> shader;
 	std::shared_ptr<std::unordered_map<std::string, Entity>> entities;
 
 public:
 	
-	Renderer(std::shared_ptr<Shader> shader_, std::shared_ptr<std::unordered_map<std::string, Entity>> entities_);
+	Renderer(std::shared_ptr<std::unordered_map<std::string, Shader>> shader_, std::shared_ptr<std::unordered_map<std::string, Entity>> entities_);
 	Renderer() = default;
 	~Renderer() = default;
 };

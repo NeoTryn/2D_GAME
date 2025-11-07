@@ -9,6 +9,7 @@
 ResourceManager::ResourceManager() {
 	ResourceManager::entities = std::make_shared<std::unordered_map<std::string, Entity>>();
 	ResourceManager::shaders = std::make_shared<std::unordered_map<std::string,Shader>>();
+	ResourceManager::atlas = std::make_shared<unsigned int>();
 }
 
 void ResourceManager::readFromFile(std::string path, std::string* result) {
