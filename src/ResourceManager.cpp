@@ -2,7 +2,14 @@
 
 #include <fstream>
 #include <iostream>
+#include <memory>
 #include <stdexcept>
+#include <unordered_map>
+
+ResourceManager::ResourceManager() {
+	ResourceManager::entities = std::make_shared<std::unordered_map<std::string, Entity>>();
+	ResourceManager::shaders = std::make_shared<std::unordered_map<std::string,Shader>>();
+}
 
 void ResourceManager::readFromFile(std::string path, std::string* result) {
 
