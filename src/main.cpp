@@ -29,8 +29,14 @@ const char* fragmentShaderSrc =
 
 const float vertices[] = {
 	-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
-	 0.0f,  0.5f, 0.0f, 0.5f, 1.0f,
-	 0.5f, -0.5f, 0.0f, 1.0f, 0.0f
+	-0.5f,  0.5f, 0.0f, 0.0f, 1.0f,
+	 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+	 0.5f,  0.5f, 0.0f, 1.0f, 1.0f 
+};
+
+const int indices[] = {
+	0, 1, 3,
+	3, 2, 0 
 };
 
 int main() {
@@ -81,15 +87,18 @@ int main() {
 
 	shader.use();
 
-		unsigned int VBO, VAO;
+	unsigned int VBO, VAO, EBO;
 
 	glCreateBuffers(1, &VBO);
 	glCreateBuffers(1, &VAO);
+	glCreateBuffers(1, &EBO);
 
 	glBindVertexArray(VAO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), &vertices, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), &indices, GL_STATIC_DRAW);
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), reinterpret_cast<void*>(0));
 	glEnableVertexAttribArray(0);
@@ -99,6 +108,7 @@ int main() {
 
 	glBindVertexArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 	stbi_set_flip_vertically_on_load(true);
 
@@ -114,14 +124,14 @@ int main() {
 
 	int width, height, nrChannels;
 	
-	const char* path = "img/blow_my_whistle.jpg";
+	const char* path = "img/squid.png";
 
 	unsigned char* data = stbi_load(path, &width, &height, &nrChannels, 0);
 			
 	std::cout << width << " " << height << " " << nrChannels <<"\n";
 
 	if (data) {
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
 	}
 	else {
@@ -142,7 +152,9 @@ int main() {
 		
 		shader.use();
 		glBindVertexArray(VAO);
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+		
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
