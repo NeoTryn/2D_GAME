@@ -4,6 +4,7 @@
 
 #include "Entity.hpp"
 #include "Shader.hpp"
+#include "Renderer.hpp"
 
 #ifndef RESOURCEMANAGER_HPP
 #define RESOURCEMANAGER_HPP
@@ -22,6 +23,7 @@ public:
 	} atlas;
 
 	ResourceManager(const char* vertexShaderSrc, const char* fragmentShaderSrc);
+	ResourceManager() = default;
 	~ResourceManager() = default;
 
 	void loadAtlas(); 

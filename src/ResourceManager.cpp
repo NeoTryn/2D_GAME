@@ -71,6 +71,8 @@ void ResourceManager::writeToFile(std::string path, std::string content) {
 }
 
 void ResourceManager::loadAtlas() {
+	
+	stbi_set_flip_vertically_on_load(true);
 
 	unsigned int texture;
 	

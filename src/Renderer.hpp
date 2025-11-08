@@ -16,9 +16,11 @@ private:
 
 public:
 	
-	Renderer(std::shared_ptr<std::unordered_map<std::string, Shader>> shader_, std::shared_ptr<std::unordered_map<std::string, Entity>> entities_);
+	Renderer(std::shared_ptr<std::unordered_map<std::string, Shader>> shaders_, std::shared_ptr<std::unordered_map<std::string, Entity>> entities_);
 	Renderer() = default;
 	~Renderer() = default;
+
+	void draw(std::vector<std::string> entities, std::string shader);
 };
 
 #endif

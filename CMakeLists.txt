@@ -17,6 +17,8 @@ add_executable(game
 			   src/Entity.cpp
 			   src/Renderer.hpp
 			   src/Renderer.cpp
+			   src/Game.hpp
+			   src/Game.cpp
               )
 
 target_include_directories(game PUBLIC ~/include)
