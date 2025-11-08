@@ -8,3 +8,6 @@ Makefile
 
 src/glad.c
 src/stb_image.h
+
+img/blow_my_whistle.jpg
+img/squid.png
