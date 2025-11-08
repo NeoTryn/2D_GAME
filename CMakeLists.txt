@@ -13,6 +13,10 @@ add_executable(game
 			   src/ResourceManager.hpp
 			   src/ResourceManager.cpp
 			   src/stb_image_implementation.cpp
+			   src/Entity.hpp
+			   src/Entity.cpp
+			   src/Renderer.hpp
+			   src/Renderer.cpp
               )
 
 target_include_directories(game PUBLIC ~/include)

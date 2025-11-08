@@ -1,41 +1,10 @@
-#include "Shader.hpp"
-#include <GLFW/glfw3.h>
-
 #include "ResourceManager.hpp"
+#include <GLFW/glfw3.h>
 
 #include <iostream>
 
 void framebufferSizeCallback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
-
-/*
-const char* vertexShaderSrc = 
-"#version 460 core\n"
-"layout (location = 0) in vec3 vertPos;\n"
-"\n"
-"void main() {\n"
-"	gl_Position = vec4(vertPos, 1.0f);\n"
-"}\n";
-
-const char* fragmentShaderSrc = 
-"#version 460 core\n"
-"out vec4 fragCol;\n"
-"\n"
-"void main() {\n"
-"	fragCol = vec4(0.9, 0.3, 0.5, 1.0);\n"
-"}\n";*/
-
-const float vertices[] = {
-	-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
-	-0.5f,  0.5f, 0.0f, 0.0f, 1.0f,
-	 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
-	 0.5f,  0.5f, 0.0f, 1.0f, 1.0f 
-};
-
-const int indices[] = {
-	0, 1, 3,
-	3, 2, 0 
-};
 
 int main() {
 
@@ -78,70 +47,23 @@ int main() {
 	ResourceManager::readFromFile("src/shader/vertex_shader.glsl", &vertexShaderStr);
 	ResourceManager::readFromFile("src/shader/fragment_shader.glsl", &fragmentShaderStr);
 
-	std::cout << vertexShaderStr << "\n\n" << fragmentShaderStr << std::endl;
-
 	const char* vertexShaderSrc = vertexShaderStr.c_str();
 	const char* fragmentShaderSrc = fragmentShaderStr.c_str();
 
-	unsigned int VBO, VAO, EBO;
+		ResourceManager mng = {vertexShaderSrc, fragmentShaderSrc};
 
-	glCreateBuffers(1, &VBO);
-	glCreateBuffers(1, &VAO);
-	glCreateBuffers(1, &EBO);
-
-	glBindVertexArray(VAO);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), &vertices, GL_STATIC_DRAW);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), &indices, GL_STATIC_DRAW);
-
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), reinterpret_cast<void*>(0));
-	glEnableVertexAttribArray(0);
-
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), reinterpret_cast<void*>(3 * sizeof(float)));
-	glEnableVertexAttribArray(1);
-
-	glBindVertexArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-	/*unsigned int texture;
 	
-	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture);
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	short rows = static_cast<short>(mng.atlas.height / 32);
+	short columns = static_cast<short>(mng.atlas.width / 32);
 
-	int width, height, nrChannels;
-	
-	const char* path = "img/squid.png";
+	std::cout << "Rows: " << rows << "\nColumns: " << columns << std::endl;
 
-	unsigned char* data = stbi_load(path, &width, &height, &nrChannels, 0);
-			
-	std::cout << width << " " << height << " " << nrChannels <<"\n";
+	AtlasSpec spec = {0, 1, 0, 1, rows, columns};
 
-	if (data) {
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D);
-	}
-	else {
-		std::cerr << "Image couldn't be loaded. \n";
-	}
-	stbi_image_free(data);
-	shader.uniform1i("whistle", 0);
+	Entity player = {spec};
 
-	glBindTexture(GL_TEXTURE_2D, 0);
-
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, texture);
-	
-	*/
-
-	ResourceManager mng = {vertexShaderSrc, fragmentShaderSrc};
+	(*mng.entities)["player"] = player;
 
 	auto shader = mng.shaders->find("default");
 
@@ -151,8 +73,8 @@ int main() {
 		glClear(GL_COLOR_BUFFER_BIT);
 		
 		shader->second.use();
-		glBindVertexArray(VAO);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+		glBindVertexArray(mng.entities->find("player")->second.vertexArrayObjects[0]);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mng.entities->find("player")->second.elementBufferObject);
 		
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 

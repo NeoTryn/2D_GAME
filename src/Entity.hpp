@@ -1,4 +1,3 @@
-#include <string>
 #include <vector>
 
 #ifndef ENTITY_HPP
@@ -7,21 +6,23 @@
 
 struct AtlasSpec {
 
-	short beginColumn, endColumn, beginRow, endRow;
+	short beginColumn, endColumn, beginRow, endRow, rows, columns;
 };
 
 class Entity {
 public:
 
 	std::vector<unsigned int> vertexArrayObjects;
+	unsigned int elementBufferObject;
 
-	Entity(std::string samplerName, AtlasSpec);
+	Entity(AtlasSpec spec);
+
+	Entity() = default;
 	~Entity() = default;
 
 private:
 	
-	void loadSpriteBatch(AtlasSpec atlasSpec);
-	void loadTexture(std::string samplerName);
+	void loadSpriteBatch(AtlasSpec spec);
 };
 
 #endif

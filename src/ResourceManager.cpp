@@ -88,8 +88,8 @@ void ResourceManager::loadAtlas() {
 
 	unsigned char* data = stbi_load(path, &width, &height, &nrChannels, 0);
 			
-	std::cout << width << " " << height << " " << nrChannels <<"\n";
-
+	//std::cout << width << " " << height << " " << nrChannels <<"\n";
+	
 	if (data) {
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
@@ -105,4 +105,10 @@ void ResourceManager::loadAtlas() {
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture);
+
+
+	ResourceManager::atlas.width = width;
+	ResourceManager::atlas.height = height;
+	ResourceManager::atlas.nrChannels = nrChannels;
+	ResourceManager::atlas.texture = texture;
 }
