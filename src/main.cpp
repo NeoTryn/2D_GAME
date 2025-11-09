@@ -3,9 +3,6 @@
 
 #include <iostream>
 
-void framebufferSizeCallback(GLFWwindow* window, int width, int height);
-void processInput(GLFWwindow* window);
-
 int main() {
 
 	glfwWindowHint(GLFW_VERSION_MAJOR, 4);
