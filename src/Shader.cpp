@@ -127,8 +127,8 @@ void Shader::uniformMat3(std::string name, glm::mat3 value) {
 	glUniformMatrix3fv(glGetUniformLocation(Shader::program, nameCStr), 1, GL_FALSE, glm::value_ptr(value));
 }
 
-void Shader::uniformMat4(std::string name, glm::mat4 value) {
-	const char* nameCStr = name.c_str();
+void Shader::uniformMat4(const char* name, glm::mat4 value) {
+	//const char* nameCStr = name.c_str();
 
-	glUniformMatrix4fv(glGetUniformLocation(Shader::program, nameCStr), 1, GL_FALSE, glm::value_ptr(value));
+	glUniformMatrix4fv(glGetUniformLocation(Shader::program, name), 1, GL_FALSE, glm::value_ptr(value));
 }
