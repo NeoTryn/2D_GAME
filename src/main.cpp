@@ -26,9 +26,16 @@ int main() {
 
 	Entity player = {spec};
 
+	player.setScale(glm::vec2(100.0f, 100.0f));
+	player.setSize(glm::vec2(1.0f, 1.0f));
+	player.setAxis(glm::vec2(0.0f, 0.0f));
+	player.setPosition(glm::vec2(95.0f, 45.0f));
+	player.setRotation(0.0f);
+	player.setColor(glm::vec3(0.5f, 0.3f, 0.2f));
+
 	(*game.mng.entities)["player"] = player;
 
-	game.loop();	
+	game.loop();
 
 	game.destroy();
 

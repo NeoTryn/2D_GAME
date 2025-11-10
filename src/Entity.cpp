@@ -41,15 +41,6 @@ void Entity::loadSpriteBatch(AtlasSpec spec) {
 	 			0.5f,  0.5f, 0.0f, columnStep * (j + 1), rowStep * (i + 1) 
 			};
 
-			for (int k = 0; k < (sizeof(vertices) / sizeof(float)); k++) {
-
-				if (k % 5 == 0) {
-					std::cout << std::endl;
-				}
-
-				std::cout << vertices[k] << " ";
-			}
-
 			glCreateBuffers(1, &VBO);
 			glCreateBuffers(1, &VAO);
 
@@ -73,3 +64,5 @@ void Entity::loadSpriteBatch(AtlasSpec spec) {
 		}
 	}
 }
+
+

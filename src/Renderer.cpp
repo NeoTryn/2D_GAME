@@ -1,22 +1,63 @@
 #include "Renderer.hpp"
+#include <glm/glm.hpp>
+#include <iostream>
 
 Renderer::Renderer(std::shared_ptr<std::unordered_map<std::string, Shader>> shaders_, std::shared_ptr<std::unordered_map<std::string, Entity>> entities_) {
-	Renderer::shader = shaders_;
+	Renderer::shaders = shaders_;
 	Renderer::entities = entities_;
 }
 
 void Renderer::draw(std::vector<std::string> entities, std::string shader) {
 	
+	Shader* s = Renderer::getShaderByName(shader);
+	
+	s->use();
+
+	glm::mat4 projection = glm::mat4(1.0f);
+
+	projection = glm::ortho(0.0f, FRUSTUM_WIDTH, FRUSTUM_HEIGHT, 0.0f, -1.0f, 1.0f);
+
+	s->uniformMat4("proj", projection);
+
 	for (int i = 0; i < entities.size(); i++) {
 		
-		Entity e = (*Renderer::entities).find(entities[i])->second;
-		Shader s = (*Renderer::shader).find(shader)->second;
-		
-		glBindVertexArray(e.vertexArrayObjects[0]);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, e.elementBufferObject);
-		
-		s.use();
+		Entity* e = Renderer::getEntityByName(entities[i]);
+	
+		update(s, e->getColor(), e->getSize(), e->getScale(), e->getPosition(), e->getRotation(), e->getAxis());
 
+		s->use();
+
+		glBindVertexArray(e->vertexArrayObjects[0]);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, e->elementBufferObject);
+		
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 	}
+}
+
+void Renderer::update(Shader* s, glm::vec3 color, glm::vec2 currentSize, glm::vec2 scale, glm::vec2 position, float rotate, glm::vec2 axis) {
+	
+	s->use();
+
+	std::cout << "Scale.x: "<< scale.x << " Scale.y: " << scale.y << std::endl;
+
+	glm::mat4 model = glm::mat4(1.0f);
+
+	model = glm::translate(model, glm::vec3(position, 0.0f));
+
+	model = glm::translate(model, glm::vec3(0.5 * currentSize.x, 0.5 * currentSize.y, 0.0f));
+	model = glm::rotate(model, glm::radians(rotate), glm::vec3(axis, 0.0f));
+	model = glm::translate(model, glm::vec3(-0.5 * currentSize.x, -0.5 * currentSize.y, 0.0f));
+
+	model = glm::scale(model, glm::vec3(scale, 0.0f));
+
+	s->uniformMat4("model", model);
+	s->uniformVec3("color", color);
+}
+
+Entity* Renderer::getEntityByName(std::string name) {
+	return &((*Renderer::entities).find(name)->second);
+}
+
+Shader* Renderer::getShaderByName(std::string name) {
+	return &((*Renderer::shaders).find(name)->second);
 }

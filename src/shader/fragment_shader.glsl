@@ -4,7 +4,8 @@ out vec4 fragCol;
 in vec2 texCoords;
 
 uniform sampler2D image;
+uniform vec3 color;
 
 void main() {
-	fragCol = texture(image, texCoords) * vec4(0.2, 0.5, 0.6, 1.0);
+	fragCol = texture(image, texCoords) * vec4(color, 1.0);
 }

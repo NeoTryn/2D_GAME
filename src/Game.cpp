@@ -63,7 +63,7 @@ void Game::clear() {
 
 void Game::render() {
 	std::vector<std::string> entities;
-
+	
 	entities.push_back("player");
 
 	Game::renderer.draw(entities, "default");
