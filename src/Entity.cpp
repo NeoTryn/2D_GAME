@@ -35,10 +35,10 @@ void Entity::loadSpriteBatch(AtlasSpec spec) {
 			unsigned int VAO, VBO;
 
 			float vertices[] = {
-				-0.5f, -0.5f, 0.0f, columnStep * j, rowStep * i,
-				-0.5f,  0.5f, 0.0f, columnStep * j, rowStep * (i + 1),
-				0.5f, -0.5f, 0.0f, columnStep * (j + 1), rowStep * i,
-	 			0.5f,  0.5f, 0.0f, columnStep * (j + 1), rowStep * (i + 1) 
+				0.0f, 0.0f, 0.0f, columnStep * j, rowStep * i,
+				0.0f,  1.0f, 0.0f, columnStep * j, rowStep * (i + 1),
+				1.0f, 0.0f, 0.0f, columnStep * (j + 1), rowStep * i,
+	 			1.0f,  1.0f, 0.0f, columnStep * (j + 1), rowStep * (i + 1) 
 			};
 
 			glCreateBuffers(1, &VBO);

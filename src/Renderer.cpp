@@ -1,4 +1,5 @@
 #include "Renderer.hpp"
+#include <glm/ext/matrix_clip_space.hpp>
 #include <glm/glm.hpp>
 #include <iostream>
 
@@ -15,7 +16,10 @@ void Renderer::draw(std::vector<std::string> entities, std::string shader) {
 
 	glm::mat4 projection = glm::mat4(1.0f);
 
-	projection = glm::ortho(0.0f, FRUSTUM_WIDTH, FRUSTUM_HEIGHT, 0.0f, -1.0f, 1.0f);
+	projection = glm::ortho(0.0f, 1920.0f, 0.0f, 1080.0f, -100.0f, 100.0f);
+	//projection = glm::perspective(120.0f, FRUSTUM_WIDTH / FRUSTUM_HEIGHT, -1.0f, 100.0f);
+
+	//projection = glm::rotate(projection, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 
 	s->uniformMat4("proj", projection);
 
@@ -38,14 +42,14 @@ void Renderer::update(Shader* s, glm::vec3 color, glm::vec2 currentSize, glm::ve
 	
 	s->use();
 
-	std::cout << "Scale.x: "<< scale.x << " Scale.y: " << scale.y << std::endl;
+	//std::cout << "Scale.x: "<< scale.x << " Scale.y: " << scale.y << std::endl;
 
 	glm::mat4 model = glm::mat4(1.0f);
 
-	model = glm::translate(model, glm::vec3(position, 0.0f));
+	model = glm::translate(model, glm::vec3(80.0f, 600.0f, 0.0f));
 
 	model = glm::translate(model, glm::vec3(0.5 * currentSize.x, 0.5 * currentSize.y, 0.0f));
-	model = glm::rotate(model, glm::radians(rotate), glm::vec3(axis, 0.0f));
+	model = glm::rotate(model, glm::radians(1.0f), glm::vec3(0.0f,0.0f, 1.0f));
 	model = glm::translate(model, glm::vec3(-0.5 * currentSize.x, -0.5 * currentSize.y, 0.0f));
 
 	model = glm::scale(model, glm::vec3(scale, 0.0f));

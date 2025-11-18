@@ -33,7 +33,7 @@ public:
 
 	void uniformMat2(std::string name, glm::mat2 value);
 	void uniformMat3(std::string name, glm::mat3 value);
-	void uniformMat4(const char* name, glm::mat4 value);
+	void uniformMat4(std::string name, glm::mat4 value);
 
 private:
 
