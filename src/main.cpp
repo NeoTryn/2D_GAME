@@ -26,7 +26,7 @@ int main() {
 
 	Entity player = {spec};
 
-	player.setScale(glm::vec2(1000.0f, 1000.0f));
+	player.setScale(glm::vec2(2.0f, 2.0f));
 	player.setSize(glm::vec2(1.0f, 1.0f));
 	player.setAxis(glm::vec2(0.0f, 0.0f));
 	player.setPosition(glm::vec2(95.0f, 45.0f));
@@ -42,6 +42,8 @@ int main() {
 	}
 
 	(*game.mng.entities)["player"] = player;
+		
+	glEnable(GL_DEPTH_TEST);
 
 	game.loop();
 

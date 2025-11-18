@@ -16,12 +16,17 @@ void Renderer::draw(std::vector<std::string> entities, std::string shader) {
 
 	glm::mat4 projection = glm::mat4(1.0f);
 
-	projection = glm::ortho(0.0f, 1920.0f, 0.0f, 1080.0f, -100.0f, 100.0f);
-	//projection = glm::perspective(120.0f, FRUSTUM_WIDTH / FRUSTUM_HEIGHT, -1.0f, 100.0f);
+	//projection = glm::ortho(0.0f, 1920.0f, 0.0f, 1080.0f, -100.0f, 100.0f);
+	projection = glm::perspective(glm::radians(45.0f), 1920.0f / 1080.0f, 0.1f, 100.0f);
+
+	glm::mat4 view = glm::mat4(1.0f);
+
+	view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
 
 	//projection = glm::rotate(projection, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 
 	s->uniformMat4("proj", projection);
+	s->uniformMat4("view", view);
 
 	for (int i = 0; i < entities.size(); i++) {
 		
@@ -34,7 +39,7 @@ void Renderer::draw(std::vector<std::string> entities, std::string shader) {
 		glBindVertexArray(e->vertexArrayObjects[0]);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, e->elementBufferObject);
 		
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
 	}
 }
 
@@ -46,10 +51,10 @@ void Renderer::update(Shader* s, glm::vec3 color, glm::vec2 currentSize, glm::ve
 
 	glm::mat4 model = glm::mat4(1.0f);
 
-	model = glm::translate(model, glm::vec3(80.0f, 600.0f, 0.0f));
+	//model = glm::translate(model, glm::vec3(80.0f, 600.0f, 0.0f));
 
 	model = glm::translate(model, glm::vec3(0.5 * currentSize.x, 0.5 * currentSize.y, 0.0f));
-	model = glm::rotate(model, glm::radians(1.0f), glm::vec3(0.0f,0.0f, 1.0f));
+	model = glm::rotate(model, glm::radians(45.0f), glm::vec3(1.0f,1.0f, 1.0f));
 	model = glm::translate(model, glm::vec3(-0.5 * currentSize.x, -0.5 * currentSize.y, 0.0f));
 
 	model = glm::scale(model, glm::vec3(scale, 0.0f));
