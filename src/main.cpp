@@ -44,6 +44,7 @@ int main() {
 	(*game.mng.entities)["player"] = player;
 		
 	glEnable(GL_DEPTH_TEST);
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	game.loop();
 

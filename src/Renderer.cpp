@@ -1,4 +1,6 @@
 #include "Renderer.hpp"
+
+#include <GLFW/glfw3.h>
 #include <glm/ext/matrix_clip_space.hpp>
 #include <glm/glm.hpp>
 #include <iostream>
@@ -29,6 +31,8 @@ void Renderer::draw(std::vector<std::string> entities, std::string shader) {
 	s->uniformMat4("view", view);
 
 	for (int i = 0; i < entities.size(); i++) {
+
+		//std::cout << entities[i] << std::endl;
 		
 		Entity* e = Renderer::getEntityByName(entities[i]);
 	
@@ -37,7 +41,9 @@ void Renderer::draw(std::vector<std::string> entities, std::string shader) {
 		s->use();
 
 		glBindVertexArray(e->vertexArrayObjects[0]);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, e->elementBufferObject);
+
+		//std::cout << "VAO " << i << " in Renderer: " << e->vertexArrayObjects[0] << "\n";
+		//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, e->elementBufferObject);
 		
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 	}
@@ -51,13 +57,14 @@ void Renderer::update(Shader* s, glm::vec3 color, glm::vec2 currentSize, glm::ve
 
 	glm::mat4 model = glm::mat4(1.0f);
 
-	//model = glm::translate(model, glm::vec3(80.0f, 600.0f, 0.0f));
+	model = glm::translate(model, glm::vec3(0.25f, 0.0f, -3.0f));
 
-	model = glm::translate(model, glm::vec3(0.5 * currentSize.x, 0.5 * currentSize.y, 0.0f));
-	model = glm::rotate(model, glm::radians(45.0f), glm::vec3(1.0f,1.0f, 1.0f));
-	model = glm::translate(model, glm::vec3(-0.5 * currentSize.x, -0.5 * currentSize.y, 0.0f));
+	//model = glm::translate(model, glm::vec3(0.5 * currentSize.x, 0.5 * currentSize.y, 0.5f));
+	// model = glm::rotate(model, glm::radians(45.0f), glm::vec3(0.0f,1.0f, 1.0f));
+	model = glm::rotate(model, static_cast<float>(glfwGetTime()) * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
+	//model = glm::translate(model, glm::vec3(-0.5 * currentSize.x, -0.5 * currentSize.y, -0.5f));
 
-	model = glm::scale(model, glm::vec3(scale, 0.0f));
+	model = glm::scale(model, glm::vec3(scale, scale.x));
 
 	s->uniformMat4("model", model);
 	s->uniformVec3("color", color);
