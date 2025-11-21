@@ -7,5 +7,11 @@ uniform sampler2D image;
 uniform vec3 color;
 
 void main() {
-	fragCol = texture(image, texCoords);// * vec4(color, 1.0);
+	vec4 texColor = texture(image, texCoords);// * vec4(color, 1.0);
+
+	if (texColor.a < 0.1) {
+		discard;
+	}
+
+	fragCol = texColor;
 }
